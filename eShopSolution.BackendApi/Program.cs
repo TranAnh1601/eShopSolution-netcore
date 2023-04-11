@@ -10,6 +10,8 @@ using eShopSolution.Application.System.Users;
 using FluentAssertions.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using FluentValidation.AspNetCore;
+using eShopSolution.ViewModels.System.Users;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +36,10 @@ builder.Services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
 builder.Services.AddTransient<IPublicProductService, PublicProductService>();
 builder.Services.AddTransient<IManageProductService, ManageProductService>();
 builder.Services.AddTransient<IUserService, UserService>();
+
+
+builder.Services.AddControllers()
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
 builder.Services.AddControllers();
 
