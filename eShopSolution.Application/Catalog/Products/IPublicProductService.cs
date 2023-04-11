@@ -14,6 +14,6 @@ namespace eShopSolution.Application.Catalog.Products
         //hien thi danh sach san pham
        Task<PagedResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductPagingRequest request);
 
-        Task<List<ProductViewModel>> GetAll(string languageId);
+        //Task<List<ProductViewModel>> GetAll(string languageId);
     }
 }

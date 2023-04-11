@@ -1,5 +1,6 @@
 ﻿using eShopSolution.Application.Catalog.Products;
 using eShopSolution.ViewModels.Catalog.Product;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,7 +8,7 @@ namespace eShopSolution.BackendApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
+    [Authorize]
 
     public class ProductController : ControllerBase
     {
@@ -19,14 +20,9 @@ namespace eShopSolution.BackendApi.Controllers
             _publicProductService = publicProductService;
             _manageProductService = publicManageService;
         }
-        [HttpGet]
-        public async Task<ActionResult> Get(string languageId)
-        {
-            var products = await _publicProductService.GetAll(languageId);
-            return Ok(products);
-        }
+      
         [HttpGet("public-paging/{languageId}")]
-        public async Task<ActionResult> Get([FromQuery]GetPublicProductPagingRequest request)
+        public async Task<ActionResult> GetAllPaging([FromQuery]GetPublicProductPagingRequest request)
         {
             var products = await _publicProductService.GetAllByCategoryId(request);
             return Ok(products);
