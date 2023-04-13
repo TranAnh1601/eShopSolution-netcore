@@ -41,7 +41,7 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddControllers()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
-builder.Services.AddControllers();
+//builder.Services.AddControllers();
 
 
 
