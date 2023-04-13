@@ -7,12 +7,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpClient();
 
-//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-//    .AddCookie(options =>
-//    {
-//        options.LoginPath = "/Login/Index";
-//        options.AccessDeniedPath = "/User/Forbidden/";
-//    });
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/User/Login";
+        options.AccessDeniedPath = "/User/Forbidden/";
+    });
 //builder.Services.AddSession(options =>
 //{
 //    options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -45,7 +45,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseAuthentication();
 app.UseRouting();
 
 app.UseAuthorization();
