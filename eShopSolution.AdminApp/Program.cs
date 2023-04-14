@@ -13,11 +13,11 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/User/Login";
         options.AccessDeniedPath = "/User/Forbidden/";
     });
-//builder.Services.AddSession(options =>
-//{
-//    options.IdleTimeout = TimeSpan.FromMinutes(30);
-//});
-//builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+});
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews()
@@ -28,7 +28,7 @@ builder.Services.AddTransient<IUserApiClient, UserApiClient>();
 //builder.Services.AddTransient<ILanguageApiClient, LanguageApiClient>();
 //builder.Services.AddTransient<IProductApiClient, ProductApiClient>();
 //builder.Services.AddTransient<ICategoryApiClient, CategoryApiClient>();
-//builder.Services.AddRazorPages();
+builder.Services.AddRazorPages();
 
 //var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"); // ko can load lai
 //if(enviroment == Environment.D)
@@ -49,7 +49,7 @@ app.UseAuthentication();
 app.UseRouting();
 
 app.UseAuthorization();
-
+app.UseSession();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

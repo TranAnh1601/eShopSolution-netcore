@@ -25,9 +25,24 @@ namespace eShopSolution.AdminApp.Controllers
            
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult>Index(string keyword, int pageIndex = 1, int pageSize = 10)
         {
-            return View();
+            var session = HttpContext.Session.GetString("Token");
+            var request = new GetUserPagingRequest()
+            {
+                BearerToken = session,
+                Keyword = keyword,
+                PageIndex = pageIndex,
+                PageSize = pageSize
+            };
+            var data = await _userApiClient.GetUsersPagings(request);
+            //ViewBag.Keyword = keyword;
+            //if (TempData["result"] != null)
+            //{
+            //    ViewBag.SuccessMsg = TempData["result"];
+            //}
+            //return View(data.ResultObj);
+            return View(data);
         }
       
 
@@ -61,7 +76,7 @@ namespace eShopSolution.AdminApp.Controllers
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
                 IsPersistent = false // k ghi nho mat khau
             };
-            
+            HttpContext.Session.SetString("Token", token);
             await HttpContext.SignInAsync(
                        CookieAuthenticationDefaults.AuthenticationScheme,
                        userPrincipal,

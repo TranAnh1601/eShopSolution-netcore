@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Http;
 namespace eShopSolution.Application.Catalog.Products
 {
     //interface
-    public interface IManageProductService
+    public interface IProductService
     {
         // dinh nghia phuong thuc
         //tra ve ma san pham vua tao
@@ -29,8 +29,7 @@ namespace eShopSolution.Application.Catalog.Products
         Task<bool> UpdateStock(int productId, int addedQuantity);
         Task AddViewcount(int productId);
 
-        Task<int> AddImage(int productId, List<IFormFile> files); //, ProductImageCreateRequest request
-
+        Task<int> AddImage(int productId, ProductImageCreateRequest request);
         Task<int> UpdateImage(int imageId, ProductImageUpdateRequest request);
 
         Task<ProductImageViewModel> GetImageById(int imageId);
@@ -40,5 +39,7 @@ namespace eShopSolution.Application.Catalog.Products
         Task<int> RemoveImage(int imageId);
         //truyen 1 so request 
         Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request);
+        Task<PagedResult<ProductViewModel>> GetAllByCategoryId(GetPublicProductPagingRequest request);
+
     }
 }
