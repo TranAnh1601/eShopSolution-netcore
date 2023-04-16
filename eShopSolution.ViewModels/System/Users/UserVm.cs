@@ -8,13 +8,12 @@ using System.Xml.Linq;
 
 namespace eShopSolution.ViewModels.System.Users
 {
-    public class UserVm 
-    {
-
+    public class UserVm
+    { 
         public Guid Id { get; set; }
 
         [Display(Name = "Tên")]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
         [Display(Name = "Họ")]
         public string LastName { get; set; }
@@ -30,7 +29,6 @@ namespace eShopSolution.ViewModels.System.Users
 
         [Display(Name = "Ngày sinh")]
         public DateTime Dob { get; set; }
-
-       // public IList<string> Roles { get; set; }
+        public IList<string> Roles { get; set; }
     }
 }

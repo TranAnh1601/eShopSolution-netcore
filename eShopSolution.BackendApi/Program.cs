@@ -20,6 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString(SystemConstants.MainConnectionString);
 builder.Services.AddDbContext<EShopDbContext>(options => options.UseSqlServer(connectionString));
+
 builder.Services.AddIdentity<AppUser, AppRole>()
     .AddEntityFrameworkStores<EShopDbContext>()
     .AddDefaultTokenProviders();

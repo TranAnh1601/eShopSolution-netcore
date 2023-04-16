@@ -77,7 +77,7 @@ namespace eShopSolution.Application.System.Users
             var query = _userManager.Users;
             if (!string.IsNullOrEmpty(request.Keyword)) // neu khac rong
             {
-                query = query.Where(x => x.UserName.Contains(request.Keyword) 
+                query = query.Where(x => x.UserName.Contains(request.Keyword)
                  || x.PhoneNumber.Contains(request.Keyword)); //contains chua 1 trong cac ki tu
             }
 
@@ -98,7 +98,7 @@ namespace eShopSolution.Application.System.Users
 
             var pagedResult = new PagedResult<UserVm>()
             {
-                TotalRecord = totalRow,
+                TotalRecords = totalRow,
                 //PageIndex = request.PageIndex,
                 //PageSize = request.PageSize,
                 Items = data
@@ -106,6 +106,7 @@ namespace eShopSolution.Application.System.Users
             //return new ApiSuccessResult<PagedResult<UserVm>>(pagedResult);
             return pagedResult;
         }
+      
 
         public async Task<bool> Register(RegisterRequest request)
         {
