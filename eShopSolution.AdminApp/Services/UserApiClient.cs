@@ -11,10 +11,12 @@ namespace eShopSolution.AdminApp.Services
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
-        public UserApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration) // create opject client
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public UserApiClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, IHttpContextAccessor httpContextAccessor) // create opject client
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
         public async Task<string> Authenticate(LoginRequest request)
         {
@@ -37,11 +39,9 @@ namespace eShopSolution.AdminApp.Services
 
         public async Task<PagedResult<UserVm>> GetUsersPagings(GetUserPagingRequest request)
         {
-
             var client = _httpClientFactory.CreateClient();
-           // var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            //var sessions = _httpContextAccessor.HttpContext.Session.GetString("Token");
             client.BaseAddress = new Uri(_configuration["BaseAddress"]);
-
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.BearerToken);
             var response = await client.GetAsync($"/api/users/paging?pageIndex=" +
                 $"{request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}");
@@ -49,6 +49,25 @@ namespace eShopSolution.AdminApp.Services
             var users = JsonConvert.DeserializeObject<PagedResult<UserVm>>(body); //<ApiSuccessResult>
             return users;
 
+        }
+
+
+        public async Task<bool> RegisterUser(RegisterRequest registerRequest)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+
+            var json = JsonConvert.SerializeObject(registerRequest);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync($"/api/users", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+
+            return response.IsSuccessStatusCode;
+            //if (response.IsSuccessStatusCode)
+            //    return JsonConvert.DeserializeObject<bool>(result);
+
+            //return JsonConvert.DeserializeObject<bool>(result);
         }
     }
 }

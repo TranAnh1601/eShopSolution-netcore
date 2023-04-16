@@ -10,30 +10,32 @@ builder.Services.AddHttpClient();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/User/Login";
+        options.LoginPath = "/Login/Index";
         options.AccessDeniedPath = "/User/Forbidden/";
     });
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-});
+
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews()
     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+});
+
 builder.Services.AddTransient<IUserApiClient, UserApiClient>();
 //builder.Services.AddTransient<IRoleApiClient, RoleApiClient>();
 //builder.Services.AddTransient<ILanguageApiClient, LanguageApiClient>();
 //builder.Services.AddTransient<IProductApiClient, ProductApiClient>();
 //builder.Services.AddTransient<ICategoryApiClient, CategoryApiClient>();
-builder.Services.AddRazorPages();
+//builder.Services.AddRazorPages();
 
 //var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"); // ko can load lai
-//if(enviroment == Environment.D)
+//if (enviroment == Environment.D)
 
-var app = builder.Build();
+    var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
