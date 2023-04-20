@@ -1,14 +1,20 @@
-﻿using eShopSolution.AdminApp.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using eShopSolution.ViewModels.System.Users;
-using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
+﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
+using eShopSolution.AdminApp.Services;
 using eShopSolution.Utilities.Constants;
+using eShopSolution.ViewModels.System.Users;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace eShopSolution.AdminApp.Controllers
 {
@@ -23,6 +29,7 @@ namespace eShopSolution.AdminApp.Controllers
             _userApiClient = userApiClient;
             _configuration = configuration;
         }
+
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -35,35 +42,32 @@ namespace eShopSolution.AdminApp.Controllers
         {
             if (!ModelState.IsValid)
                 return View(ModelState);
+
             var result = await _userApiClient.Authenticate(request);
             if (result.ResultObj == null)
             {
                 ModelState.AddModelError("", result.Message);
                 return View();
             }
-
-           // // var token = await _userApiClient.Authenticate(request);
-            // chuyen token sang userPrincipal
             var userPrincipal = this.ValidateToken(result.ResultObj);
-            //authProperties of cookie
             var authProperties = new AuthenticationProperties
             {
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
-                IsPersistent = false // k ghi nho mat khau
+                IsPersistent = false
             };
-            // //HttpContext.Session.SetString("Token", token);
             //HttpContext.Session.SetString(SystemConstants.AppSettings.DefaultLanguageId, _configuration[SystemConstants.AppSettings.DefaultLanguageId]);
             HttpContext.Session.SetString(SystemConstants.AppSettings.Token, result.ResultObj);
             await HttpContext.SignInAsync(
-                       CookieAuthenticationDefaults.AuthenticationScheme,
-                       userPrincipal,
-                       authProperties);
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        userPrincipal,
+                        authProperties);
 
             return RedirectToAction("Index", "Home");
         }
+
         private ClaimsPrincipal ValidateToken(string jwtToken)
         {
-            IdentityModelEventSource.ShowPII = true; // show event 
+            IdentityModelEventSource.ShowPII = true;
 
             SecurityToken validatedToken;
             TokenValidationParameters validationParameters = new TokenValidationParameters();
@@ -78,7 +82,5 @@ namespace eShopSolution.AdminApp.Controllers
 
             return principal;
         }
-       
-        
     }
 }

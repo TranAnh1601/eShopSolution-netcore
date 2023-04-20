@@ -10,8 +10,7 @@ namespace eShopSolution.Application.System.Users
 {
     public interface IUserService
     {
-       
-
+ 
         Task<ApiResult<bool>> Update(Guid id, UserUpdateRequest request);
 
         Task<ApiResult<PagedResult<UserVm>>>GetUsersPaging(GetUserPagingRequest request); 
