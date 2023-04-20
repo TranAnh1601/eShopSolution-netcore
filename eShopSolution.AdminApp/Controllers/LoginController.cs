@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using eShopSolution.Utilities.Constants;
 
 namespace eShopSolution.AdminApp.Controllers
 {
@@ -35,22 +36,24 @@ namespace eShopSolution.AdminApp.Controllers
             if (!ModelState.IsValid)
                 return View(ModelState);
             var result = await _userApiClient.Authenticate(request);
-            //if (result.ResultObj == null)
-            //{
-            //    ModelState.AddModelError("", result.Message);
-            //    return View();
-            //}
+            if (result.ResultObj == null)
+            {
+                ModelState.AddModelError("", result.Message);
+                return View();
+            }
 
-            var token = await _userApiClient.Authenticate(request);
+           // // var token = await _userApiClient.Authenticate(request);
             // chuyen token sang userPrincipal
-            var userPrincipal = this.ValidateToken(token); //result.ResultObj
+            var userPrincipal = this.ValidateToken(result.ResultObj);
             //authProperties of cookie
             var authProperties = new AuthenticationProperties
             {
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
                 IsPersistent = false // k ghi nho mat khau
             };
-            HttpContext.Session.SetString("Token", token);
+            // //HttpContext.Session.SetString("Token", token);
+            //HttpContext.Session.SetString(SystemConstants.AppSettings.DefaultLanguageId, _configuration[SystemConstants.AppSettings.DefaultLanguageId]);
+            HttpContext.Session.SetString(SystemConstants.AppSettings.Token, result.ResultObj);
             await HttpContext.SignInAsync(
                        CookieAuthenticationDefaults.AuthenticationScheme,
                        userPrincipal,

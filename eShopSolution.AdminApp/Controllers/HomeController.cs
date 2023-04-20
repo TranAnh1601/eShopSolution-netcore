@@ -5,8 +5,7 @@ using System.Diagnostics;
 
 namespace eShopSolution.AdminApp.Controllers
 {
-    [Authorize] // k dc phep vao khi chua dang nhap
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
 

@@ -20,20 +20,28 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddControllersWithViews()
     .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
+
+//k can load lai trang
+IMvcBuilder buil = builder.Services.AddRazorPages();
+var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+#if DEBUG
+if (environment == Environments.Development)
+{
+    buil.AddRazorRuntimeCompilation();
+}
+#endif
+
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
 });
-
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddTransient<IUserApiClient, UserApiClient>();
 //builder.Services.AddTransient<IRoleApiClient, RoleApiClient>();
 //builder.Services.AddTransient<ILanguageApiClient, LanguageApiClient>();
 //builder.Services.AddTransient<IProductApiClient, ProductApiClient>();
 //builder.Services.AddTransient<ICategoryApiClient, CategoryApiClient>();
 //builder.Services.AddRazorPages();
-
-//var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"); // ko can load lai
-//if (enviroment == Environment.D)
 
     var app = builder.Build();
 

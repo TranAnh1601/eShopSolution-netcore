@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace eShopSolution.AdminApp.Controllers
+
 {
+    [Authorize]
     public class BaseController : Controller
     {
-        [Authorize]
+       
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             var sessions = context.HttpContext.Session.GetString("Token");

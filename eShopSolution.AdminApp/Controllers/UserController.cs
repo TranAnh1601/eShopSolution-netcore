@@ -36,7 +36,12 @@ namespace eShopSolution.AdminApp.Controllers
                 PageSize = pageSize
             };
             var data = await _userApiClient.GetUsersPagings(request);
-            return View(data);
+            ViewBag.Keyword = keyword;
+            if (TempData["result"] != null)
+            {
+                ViewBag.SuccessMsg = TempData["result"];
+            }
+            return View(data.ResultObj);
         }
         [HttpGet]
         public IActionResult Create()
@@ -50,13 +55,13 @@ namespace eShopSolution.AdminApp.Controllers
                 return View();
 
             var result = await _userApiClient.RegisterUser(request);
-            if (result) //.IsSuccessed
+            if (result.IsSuccessed) 
             {
-                //TempData["result"] = "Thêm mới người dùng thành công";
+                TempData["result"] = "Thêm mới người dùng thành công";
                 return RedirectToAction("Index");
             }
-
-            //ModelState.AddModelError("", result.Message);
+            //false
+            ModelState.AddModelError("", result.Message);
             return View(request);
         }
         
@@ -67,7 +72,45 @@ namespace eShopSolution.AdminApp.Controllers
             HttpContext.Session.Remove("Token");
             return RedirectToAction("Login", "User");
         }
-       
-       
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var result = await _userApiClient.GetById(id);
+           // return View(result.ResultObj);
+            if (result.IsSuccessed)
+            {
+                var user = result.ResultObj;
+                var updateRequest = new UserUpdateRequest()
+                {
+                    Dob = user.Dob,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    PhoneNumber = user.PhoneNumber,
+                    Id = id
+                };
+                return View(updateRequest);
+            }
+            return RedirectToAction("Error", "Home");
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(UserUpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return View();
+
+            var result = await _userApiClient.UpdateUser(request.Id, request);
+            if (result.IsSuccessed)
+            {
+                TempData["result"] = "Cập nhật người dùng thành công";
+                return RedirectToAction("Index");
+            }
+
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
+
+
     }
 }
