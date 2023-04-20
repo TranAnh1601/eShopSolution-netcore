@@ -81,16 +81,14 @@ namespace eShopSolution.Application.System.Users
 
         public async Task<ApiResult<PagedResult<UserVm>>> GetUsersPaging(GetUserPagingRequest request)
         {
-            var query = _userManager.Users;
+        
+                var query = _userManager.Users;
             if (!string.IsNullOrEmpty(request.Keyword))
             {
                 query = query.Where(x => x.UserName.Contains(request.Keyword)
                  || x.PhoneNumber.Contains(request.Keyword));
             }
-
-            //3. Paging
             int totalRow = await query.CountAsync();
-
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .Select(x => new UserVm()
@@ -102,8 +100,8 @@ namespace eShopSolution.Application.System.Users
                     Id = x.Id,
                     LastName = x.LastName
                 }).ToListAsync();
-
-            //4. Select and projection
+            
+           
             var pagedResult = new PagedResult<UserVm>()
             {
                 TotalRecords = totalRow,
@@ -113,41 +111,6 @@ namespace eShopSolution.Application.System.Users
             };
             return new ApiSuccessResult<PagedResult<UserVm>>(pagedResult);
         }
-
-        //public async Task<ApiResult<PagedResult<UserVm>>> GetUsersPaging(GetUserPagingRequest request)
-        //{
-        //    var query = _userManager.Users;
-        //    if (!string.IsNullOrEmpty(request.Keyword)) // neu khac rong
-        //    {
-        //        query = query.Where(x => x.UserName.Contains(request.Keyword)
-        //         || x.PhoneNumber.Contains(request.Keyword)); //contains chua 1 trong cac ki tu
-        //    }
-
-        //    //3. Paging
-        //    int totalRow = await query.CountAsync();
-
-        //    var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
-        //        .Take(request.PageSize)
-        //        .Select(x => new UserVm()
-        //        {
-        //            Email = x.Email,
-        //            PhoneNumber = x.PhoneNumber,
-        //            UserName = x.UserName,
-        //            FirstName = x.FirstName,
-        //            Id = x.Id,
-        //            LastName = x.LastName
-        //        }).ToListAsync();
-
-        //    var pagedResult = new PagedResult<UserVm>()
-        //    {
-        //        TotalRecords = totalRow,
-        //       // PageIndex = request.PageIndex,
-        //       // PageSize = request.PageSize,
-        //        Items = data
-        //    };
-        //    return new ApiSuccessResult<PagedResult<UserVm>>(pagedResult);
-
-        //}
         public async Task<ApiResult<bool>> Register(RegisterRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName); // check user name
@@ -201,7 +164,7 @@ namespace eShopSolution.Application.System.Users
             {
                 return new ApiErrorResult<UserVm>("User không tồn tại");
             }
-           // var roles = await _userManager.GetRolesAsync(user);
+            var roles = await _userManager.GetRolesAsync(user);
             var userVm = new UserVm()
             {
                 Email = user.Email,
@@ -211,7 +174,7 @@ namespace eShopSolution.Application.System.Users
                 Id = user.Id,
                 LastName = user.LastName,
                 UserName = user.UserName,
-               // Roles = roles
+                Roles = roles
             };
             return new ApiSuccessResult<UserVm>(userVm);
         }
@@ -229,6 +192,7 @@ namespace eShopSolution.Application.System.Users
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
             user.PhoneNumber = request.PhoneNumber;
+     
 
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)

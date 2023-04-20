@@ -10,6 +10,9 @@ namespace eShopSolution.ViewModels.System.Users
 {
     public class UserVm
     { 
+        /// <summary>
+        /// //
+        /// </summary>
         public Guid Id { get; set; }
 
         [Display(Name = "Tên")]
