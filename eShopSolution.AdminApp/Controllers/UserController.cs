@@ -33,18 +33,18 @@ namespace eShopSolution.AdminApp.Controllers
            
         }
 
-        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 1)
         {
             var request = new GetUserPagingRequest()
             {
-                Keyword = "a",
+                 Keyword = "a",
                 //Keyword = keyword,
                 PageIndex = pageIndex,
                 PageSize = pageSize
             };
             var data = await _userApiClient.GetUsersPagings(request);
             ViewBag.Keyword = keyword;
-            if (TempData["result"] != null)
+            if (TempData["result"] != null) // giu lai keyword
             {
                 ViewBag.SuccessMsg = TempData["result"];
             }
