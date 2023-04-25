@@ -42,16 +42,12 @@ namespace eShopSolution.Application.System.Users
         public async Task<ApiResult<string>> Authencate(LoginRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
-            if (user == null) return null;
 
-            if (user == null) return new ApiErrorResult<string>("Tài khoản không tồn tại");
-
-            var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);//false se khoa tai khoan
-            if (!result.Succeeded)
-            {
-                return null;
-            }
-
+            if (user == null)
+            { 
+                return new ApiErrorResult<string>("Tài khoản không tồn tại");
+            }    
+            var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true); //false se khoa tai khoan
             if (!result.Succeeded)
             {
                 return new ApiErrorResult<string>("Đăng nhập không đúng");
@@ -81,7 +77,6 @@ namespace eShopSolution.Application.System.Users
 
         public async Task<ApiResult<PagedResult<UserVm>>> GetUsersPaging(GetUserPagingRequest request)
         {
-        
                 var query = _userManager.Users;
             if (!string.IsNullOrEmpty(request.Keyword))
             {
