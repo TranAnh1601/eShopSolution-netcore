@@ -43,7 +43,6 @@ namespace eShopSolution.AdminApp.Controllers
         {
             if (!ModelState.IsValid)
                 return View(ModelState);
-               // return RedirectToAction("Index", "Login");
 
             var result = await _userApiClient.Authenticate(request);
             if (result.ResultObj == null)
@@ -66,7 +65,6 @@ namespace eShopSolution.AdminApp.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-
         private ClaimsPrincipal ValidateToken(string jwtToken)
         {
             IdentityModelEventSource.ShowPII = true;
