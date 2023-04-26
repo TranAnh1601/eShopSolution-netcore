@@ -6,6 +6,13 @@
     ViewData["Title"] = "Danh sách người dùng";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@section Scripts{
+    <script>
+        setTimeout(function () {
+            $('#msgAlert').fadeOut('slow');
+        }, 2000);
+    </script>
+}
 
 <div class="container-fluid">
     <h1 class="mt-4">Danh sách người dùng</h1>
@@ -88,7 +95,8 @@
                                 <td>
                                     @Html.ActionLink("Sửa", "Edit", new { id = item.Id }) |
                                     @Html.ActionLink("Xem", "Details", new { id = item.Id }) |
-                                    @Html.ActionLink("Xóa", "Delete", new { id = item.Id })
+                                    @Html.ActionLink("Xóa", "Delete", new { id = item.Id })|
+                                    @Html.ActionLink("Gán quyền", "RoleAssign", new { id = item.Id })
                                    
                                 </td>
                             </tr>
