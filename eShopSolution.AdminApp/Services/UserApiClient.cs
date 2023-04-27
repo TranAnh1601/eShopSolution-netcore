@@ -1,4 +1,5 @@
 ﻿using eShopSolution.ViewModels.Common;
+using eShopSolution.ViewModels.System.Languages;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -7,14 +8,15 @@ using System.Text;
 
 namespace eShopSolution.AdminApp.Services
 {
-    public class UserApiClient : IUserApiClient
+    public class UserApiClient : BaseApiClient, IUserApiClient
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
         public UserApiClient(IHttpClientFactory httpClientFactory, 
             IConfiguration configuration, 
-            IHttpContextAccessor httpContextAccessor) // create opject client
+            IHttpContextAccessor httpContextAccessor)
+             : base(httpClientFactory, httpContextAccessor, configuration)// create opject client
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
@@ -79,6 +81,7 @@ namespace eShopSolution.AdminApp.Services
             if (response.IsSuccessStatusCode)
                 return JsonConvert.DeserializeObject<ApiSuccessResult<UserVm>>(body);
             return JsonConvert.DeserializeObject<ApiErrorResult<UserVm>>(body);
+
         }
         public async Task<ApiResult<bool>> UpdateUser(Guid id, UserUpdateRequest request)
         {
