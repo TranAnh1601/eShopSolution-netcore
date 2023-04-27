@@ -69,9 +69,6 @@ namespace eShopSolution.Application.System.Users
                 claims,
                 expires: DateTime.Now.AddHours(3),
                 signingCredentials: creds);
-
-            //var token = new JwtSecurityTokenHandler().WriteToken(token);
-
             return new ApiSuccessResult<string>(new JwtSecurityTokenHandler().WriteToken(token));
 
         }
@@ -83,12 +80,7 @@ namespace eShopSolution.Application.System.Users
             {
                 query = query.Where(x => x.UserName.Contains(request.Keyword)
                  || x.PhoneNumber.Contains(request.Keyword));
-            }
-            //if (request.Keyword == null)
-            //{
-            //    query = query.Where(x => x.UserName.Contains(request.Keyword)
-            //     || x.PhoneNumber.Contains(request.Keyword));
-            //}
+            }      
             int totalRow = await query.CountAsync();
             var data = await query.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
@@ -234,8 +226,5 @@ namespace eShopSolution.Application.System.Users
 
             return new ApiSuccessResult<bool>();
         }
-
-
-
     }
 }

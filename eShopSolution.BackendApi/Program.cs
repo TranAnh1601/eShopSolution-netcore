@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using FluentValidation.AspNetCore;
 using eShopSolution.ViewModels.System.Users;
 using eShopSolution.Application.System.Roles;
+using eShopSolution.Application.System.Languages;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +39,8 @@ builder.Services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
 builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IRoleService, RoleService>();
+builder.Services.AddTransient<ILanguageService, LanguageService>();
+
 
 
 

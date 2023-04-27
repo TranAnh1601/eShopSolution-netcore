@@ -31,11 +31,13 @@
 
                                         <div class="form-floating mb-3">
                                             <input class="form-control" asp-for="UserName" type="text" placeholder="Nhập tài khoản" />
+                                            @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
                                             <span asp-validation-for="UserName" class="text-danger"></span>
                                             <label>Tài khoản</label>
                                         </div>
                                         <div class="form-floating mb-3">
                                             <input class="form-control" asp-for="Password" type="password" placeholder="Enter password" />
+                                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
                                             <span asp-validation-for="Password" class="text-danger"></span>
                                             <label>Mật khẩu</label>
                                         </div>

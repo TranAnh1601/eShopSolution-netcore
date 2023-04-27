@@ -19,8 +19,4 @@
     <ProjectReference Include="..\eShopSolution.ViewModels\eShopSolution.ViewModels.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\Shared\Components\Navigation\" />
-  </ItemGroup>
-
 </Project>
